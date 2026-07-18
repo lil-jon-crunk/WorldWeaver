@@ -7,7 +7,7 @@ import org.betterx.wover.pottable.api.PottablePlantRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
@@ -30,7 +30,7 @@ public class PottablePlantRegistryImpl {
         );
     }
 
-    public static ResourceKey<PottablePlant> createKey(ResourceLocation id) {
+    public static ResourceKey<PottablePlant> createKey(Identifier id) {
         return ResourceKey.create(PottablePlantRegistry.POTTABLE_PLANT_REGISTRY, id);
     }
 

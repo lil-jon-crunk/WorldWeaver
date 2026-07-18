@@ -130,7 +130,7 @@ public abstract class BlockRegistry {
     }
 
     public @NotNull ResourceKey<Item> blockItemKey(@NotNull ResourceKey<Block> blockKey) {
-        return ResourceKey.create(BuiltInRegistries.ITEM.key(), blockKey.location());
+        return ResourceKey.create(BuiltInRegistries.ITEM.key(), blockKey.identifier());
     }
 
     /**
@@ -213,10 +213,10 @@ public abstract class BlockRegistry {
 
             if (block instanceof CustomBlockItemProvider provider) {
                 item = provider.getCustomBlockItem(
-                        itemKey.location(),
+                        itemKey.identifier(),
                         defaultBlockItemSettings().setId(ResourceKey.create(
                                 BuiltInRegistries.ITEM.key(),
-                                itemKey.location()
+                                itemKey.identifier()
                         ))
                 );
             } else {
@@ -339,7 +339,7 @@ public abstract class BlockRegistry {
                 .entrySet()
                 .stream()
                 .filter(b -> b.getValue() instanceof BlockTagProvider)
-                .forEach(b -> ((BlockTagProvider) b.getValue()).registerBlockTags(b.getKey().location(), ctx));
+                .forEach(b -> ((BlockTagProvider) b.getValue()).registerBlockTags(b.getKey().identifier(), ctx));
     }
 
     /**
@@ -362,7 +362,7 @@ public abstract class BlockRegistry {
                 .forEach(b -> {
                     var key = LootTableManager.getBlockLootTableKey(b.getKey());
                     var builder = ((BlockLootProvider) b.getValue()).registerBlockLoot(
-                            b.getKey().location(),
+                            b.getKey().identifier(),
                             provider,
                             key
                     );
@@ -400,7 +400,7 @@ public abstract class BlockRegistry {
         if (block.defaultBlockState().ignitedByLava()
                 && FlammableBlockRegistry.getDefaultInstance()
                                          .get(block)
-                                         .getBurnChance() == 0) {
+                                         .getBurnOdds() == 0) {
             FlammableBlockRegistry.getDefaultInstance().add(block, burn, spread);
         }
     }

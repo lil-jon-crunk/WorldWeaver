@@ -3,13 +3,13 @@ package org.betterx.wover.recipe.impl;
 import org.betterx.wover.recipe.api.BaseRecipeBuilder;
 import org.betterx.wover.recipe.api.RecipeBuilder;
 
-import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.triggers.Criterion;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,11 +36,11 @@ public abstract class BaseRecipeBuilderImpl<I extends BaseRecipeBuilder<I>> impl
     protected final @NotNull ItemStack output;
     protected final @NotNull ResourceKey<Recipe<?>> key;
 
-    protected BaseRecipeBuilderImpl(@NotNull ResourceLocation key, @NotNull ItemLike output) {
+    protected BaseRecipeBuilderImpl(@NotNull Identifier key, @NotNull ItemLike output) {
         this(key, new ItemStack(output, 1));
     }
 
-    protected BaseRecipeBuilderImpl(@NotNull ResourceLocation key, @NotNull ItemStack output) {
+    protected BaseRecipeBuilderImpl(@NotNull Identifier key, @NotNull ItemStack output) {
         this.key = ResourceKey.create(Registries.RECIPE, key);
         this.category = RecipeCategory.MISC;
         this.output = output;

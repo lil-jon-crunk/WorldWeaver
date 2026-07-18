@@ -12,12 +12,13 @@ import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
-import net.minecraft.client.renderer.block.model.VariantMutator;
+import net.minecraft.client.renderer.block.dispatch.VariantMutator;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.properties.conditional.Broken;
 import net.minecraft.client.renderer.special.ChestSpecialRenderer;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -41,6 +42,9 @@ import org.jetbrains.annotations.Nullable;
  * {@link org.betterx.bclib.trait.block.PathBlockTrait} for the same pattern applied to a single trait.
  */
 public class ModelTraitLibrary {
+    private static Material withSuffix(Material material, String suffix) {
+        return new Material(material.sprite().withSuffix(suffix), material.forceTranslucent());
+    }
     /**
      * A bark/stripped-bark model: a rotated pillar with matching side textures on every face, optionally
      * mirrored and with alternative texture-suffix variants. Returns {@code null} outside of a datagen
@@ -99,7 +103,7 @@ public class ModelTraitLibrary {
     }
 
     /** The chest-special-renderer id used for chests built through {@link #chest}. */
-    public static ResourceLocation chestRendered = LibWoverSets.C.mk("wooden_chest");
+    public static Identifier chestRendered = LibWoverSets.C.mk("wooden_chest");
 
     /**
      * A vanilla-style chest model: a particle-only block model plus an inventory item model wired to a
@@ -350,7 +354,7 @@ public class ModelTraitLibrary {
      * @param itemModel supplies the model location the item should reference
      * @return the model trait, or {@code null} outside of datagen
      */
-    public static BlockModelTrait externalModelDelegatedItem(Supplier<ResourceLocation> itemModel) {
+    public static BlockModelTrait externalModelDelegatedItem(Supplier<Identifier> itemModel) {
         return ModCore.isDatagen() ? Impl.externalModelDelegatedItem(itemModel) : null;
     }
 
@@ -362,7 +366,7 @@ public class ModelTraitLibrary {
      * @param itemTexture supplies the texture for the flat item, or {@code null} for the block's own texture
      * @return the model trait, or {@code null} outside of datagen
      */
-    public static BlockModelTrait externalModelFlatItem(@Nullable Supplier<ResourceLocation> itemTexture) {
+    public static BlockModelTrait externalModelFlatItem(@Nullable Supplier<Identifier> itemTexture) {
         return ModCore.isDatagen() ? Impl.externalModelFlatItem(itemTexture) : null;
     }
 
@@ -405,11 +409,11 @@ public class ModelTraitLibrary {
             return ClientBlockTraits.MODEL.with((key, block, generator) -> {
                 final var textureResource = TextureMapping.getBlockTexture(logBlock.get());
                 final var textureMapping = new TextureMapping()
-                        .put(TextureSlot.SIDE, textureResource.withSuffix("_side"))
-                        .put(TextureSlot.END, textureResource.withSuffix("_side"));
+                        .put(TextureSlot.SIDE, withSuffix(textureResource, "_side"))
+                        .put(TextureSlot.END, withSuffix(textureResource, "_side"));
                 final var alternatives = Arrays.stream(alternativeTextureSuffixe).map(suffix -> new TextureMapping()
-                                                       .put(TextureSlot.SIDE, textureResource.withSuffix("_side" + suffix))
-                                                       .put(TextureSlot.END, textureResource.withSuffix("_side" + suffix)))
+                                                       .put(TextureSlot.SIDE, withSuffix(textureResource, "_side" + suffix))
+                                                       .put(TextureSlot.END, withSuffix(textureResource, "_side" + suffix)))
                                                .toArray(TextureMapping[]::new);
 
 
@@ -428,8 +432,8 @@ public class ModelTraitLibrary {
                                 .select(Direction.SOUTH, X_ROT_90.then(Y_ROT_180))
                                 .select(Direction.WEST, X_ROT_90.then(Y_ROT_270))
                                 .select(Direction.EAST, X_ROT_90.then(Y_ROT_90));
-                ResourceLocation openTopTexture = TextureMapping.getBlockTexture(block, "_top_open");
-                ResourceLocation closedModel = TexturedModel.CUBE_TOP_BOTTOM.create(
+                Material openTopTexture = TextureMapping.getBlockTexture(block, "_top_open");
+                Identifier closedModel = TexturedModel.CUBE_TOP_BOTTOM.create(
                         block,
                         generator.vanillaGenerator.modelOutput
                 );
@@ -477,14 +481,14 @@ public class ModelTraitLibrary {
 
                 generator.vanillaGenerator.createParticleOnlyBlock(chestBlock, planks);
                 Item chestItem = chestBlock.asItem();
-                ResourceLocation itemModel = ModelTemplates.CHEST_INVENTORY.create(
+                Identifier itemModel = ModelTemplates.CHEST_INVENTORY.create(
                         chestItem,
                         TextureMapping.particle(planks),
                         generator.modelOutput()
                 );
                 ItemModel.Unbaked itemModelUnbaked = ItemModelUtils.specialModel(
                         itemModel,
-                        new ChestSpecialRenderer.Unbaked(key.location())
+                        new ChestSpecialRenderer.Unbaked(key.identifier())
                 );
                 generator.vanillaGenerator.itemModelOutput.accept(chestItem, itemModelUnbaked);
                 generator.markItemModelProvided(chestBlock);
@@ -495,11 +499,11 @@ public class ModelTraitLibrary {
             return ClientBlockTraits.MODEL.with((key, block, generator) -> {
                 final var textureResource = TextureMapping.getBlockTexture(block);
                 final var textureMapping = new TextureMapping()
-                        .put(TextureSlot.SIDE, textureResource.withSuffix("_side"))
-                        .put(TextureSlot.END, textureResource.withSuffix("_top"));
+                        .put(TextureSlot.SIDE, withSuffix(textureResource, "_side"))
+                        .put(TextureSlot.END, withSuffix(textureResource, "_top"));
                 final var alternatives = Arrays.stream(alternativeTextureSuffixe).map(suffix -> new TextureMapping()
-                                                       .put(TextureSlot.SIDE, textureResource.withSuffix("_side" + suffix))
-                                                       .put(TextureSlot.END, textureResource.withSuffix("_top")))
+                                                       .put(TextureSlot.SIDE, withSuffix(textureResource, "_side" + suffix))
+                                                       .put(TextureSlot.END, withSuffix(textureResource, "_top")))
                                                .toArray(TextureMapping[]::new);
 
                 generator.createLog(block, mirroredTexture, textureMapping, alternatives);
@@ -594,7 +598,7 @@ public class ModelTraitLibrary {
 
         private static BlockModelTrait chain() {
             return ClientBlockTraits.MODEL.with((key, chainBlock, generator) -> {
-                generator.createChainModel(chainBlock, TextureMapping.getBlockTexture(chainBlock));
+                generator.createChainModel(chainBlock, TextureMapping.getBlockTexture(chainBlock).sprite());
             });
         }
 
@@ -651,7 +655,7 @@ public class ModelTraitLibrary {
             return ClientBlockTraits.MODEL.with((key, block, generator) -> {
                 generator.excludeBlockFromValidation(block);
                 if (block.asItem() != Items.AIR) {
-                    generator.delegateItemModel(block, key.location().withPrefix("item/"));
+                    generator.delegateItemModel(block, key.identifier().withPrefix("item/"));
                 }
             });
         }
@@ -665,7 +669,7 @@ public class ModelTraitLibrary {
             });
         }
 
-        private static BlockModelTrait externalModelDelegatedItem(Supplier<ResourceLocation> itemModel) {
+        private static BlockModelTrait externalModelDelegatedItem(Supplier<Identifier> itemModel) {
             return ClientBlockTraits.MODEL.with((key, block, generator) -> {
                 generator.excludeBlockFromValidation(block);
                 if (block.asItem() != Items.AIR) {
@@ -674,7 +678,7 @@ public class ModelTraitLibrary {
             });
         }
 
-        private static BlockModelTrait externalModelFlatItem(Supplier<ResourceLocation> itemTexture) {
+        private static BlockModelTrait externalModelFlatItem(Supplier<Identifier> itemTexture) {
             return ClientBlockTraits.MODEL.with((key, block, generator) -> {
                 generator.excludeBlockFromValidation(block);
                 generator.createFlatItem(block, itemTexture == null ? null : itemTexture.get());
@@ -691,7 +695,7 @@ public class ModelTraitLibrary {
             return ClientItemTraits.MODEL.with((key, item, generator) -> {
                 final var modelLocation = ModelTemplates.FLAT_ITEM.create(
                         ModelLocationUtils.getModelLocation(item),
-                        TextureMapping.layer0(ModelLocationUtils.getModelLocation(material.get())),
+                        TextureMapping.layer0(new Material(ModelLocationUtils.getModelLocation(material.get()))),
                         generator.modelOutput
                 );
                 generator.itemModelOutput.accept(item, ItemModelUtils.plainModel(modelLocation));

@@ -10,6 +10,7 @@ import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.WorldLoader;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.Util;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +24,7 @@ public class WorldLoaderMixin {
             method = "load",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/resources/RegistryDataLoader;load(Lnet/minecraft/server/packs/resources/ResourceManager;Ljava/util/List;Ljava/util/List;)Lnet/minecraft/core/RegistryAccess$Frozen;",
+                    target = "Lnet/minecraft/resources/RegistryDataLoader;load(Lnet/minecraft/server/packs/resources/ResourceManager;Ljava/util/List;Ljava/util/List;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;",
                     ordinal = 1)
     )
     private static <S> ResourceManager wover_captureRegistryPairSecond(
@@ -36,7 +37,7 @@ public class WorldLoaderMixin {
         LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess = RegistryLayer.createRegistryAccess();
         LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess2 = layeredRegistryAccess.replaceFrom(
                 RegistryLayer.WORLDGEN,
-                RegistryDataLoader.load(resourceManager, list, RegistryDataLoader.WORLDGEN_REGISTRIES)
+                RegistryDataLoader.load(resourceManager, list, RegistryDataLoader.WORLDGEN_REGISTRIES, Util.backgroundExecutor()).join()
         );
         RegistryAccess.Frozen frozen = layeredRegistryAccess2.getAccessForLoading(RegistryLayer.DIMENSIONS);
 

@@ -4,7 +4,7 @@ import org.betterx.wover.recipe.api.RecipeBuilder;
 import org.betterx.wover.recipe.api.SmithingRecipeBuilder;
 
 import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SmithingTemplateItem;
@@ -19,7 +19,7 @@ public class SmithingRecipeBuilderImpl extends BaseRecipeBuilderImpl<SmithingRec
     protected CraftingRecipeBuilderImpl.IngredientFactory addon;
 
     public SmithingRecipeBuilderImpl(
-            @NotNull ResourceLocation id,
+            @NotNull Identifier id,
             @NotNull ItemLike output
     ) {
         super(id, output);

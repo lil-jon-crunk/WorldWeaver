@@ -3,18 +3,26 @@ plugins {
     id 'maven-publish'
     id 'idea'
     id 'eclipse'
-    id 'fabric-loom' version "${loom_version}"
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id "com.modrinth.minotaur" version "2.+"
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "com.matthewprenger.cursegradle" version "1.4.0" apply false
 }
-archivesBaseName = project.archives_base_name
-sourceCompatibility = JavaVersion.VERSION_21
-targetCompatibility = JavaVersion.VERSION_21
+
+if (gradle.startParameter.taskNames.any { it.toLowerCase().contains("curseforge") }) {
+    apply plugin: "com.matthewprenger.cursegradle"
+}
+base {
+    archivesName = project.archives_base_name
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
 
 
 def getDependencies(project, List<String> depNames, configuration) {
     return depNames.iterator().collect {
-        project.dependencies.project(path: ":$it", configuration: configuration)
+        project.dependencies.project(path: ":$it")
     }
 }
 

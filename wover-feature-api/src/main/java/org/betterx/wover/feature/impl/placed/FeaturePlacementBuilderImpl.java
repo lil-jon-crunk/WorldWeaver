@@ -641,7 +641,7 @@ public class FeaturePlacementBuilderImpl implements org.betterx.wover.feature.ap
         }
         if (bootstrapContext == null) {
             throw new IllegalStateException(
-                    "A BootstrapContext for a Feature can not be null if it should be registered! (" + key.location() + ")"
+                    "A BootstrapContext for a Feature can not be null if it should be registered! (" + key.identifier() + ")"
             );
         }
         PlacedFeature feature = build();

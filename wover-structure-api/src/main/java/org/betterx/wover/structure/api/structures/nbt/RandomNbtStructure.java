@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
  * ({@link RandomNbtStructureElement}) at random (weighted) and places it using a
  * {@link StructurePlacement} strategy. Built via
  * {@link org.betterx.wover.structure.api.builders.RandomNbtBuilder}, created through
- * {@link org.betterx.wover.structure.api.StructureManager#randomNbt(net.minecraft.resources.ResourceLocation)}.
+ * {@link org.betterx.wover.structure.api.StructureManager#randomNbt(net.minecraft.resources.Identifier)}.
  * <p>
  * Subclasses only need to provide a {@link MapCodec} (see {@link #simpleRandomCodec(Function4)}) and a
  * constructor matching its shape; the actual generation logic lives entirely in this class.

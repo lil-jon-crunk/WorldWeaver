@@ -19,6 +19,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.List;
@@ -38,13 +39,13 @@ public class ChestBlockBuilder extends AbstractBlockTraitBuilder.Generic impleme
             return combine(
                     DEFAULT,
                     BlockTraits.MAGIC_SOURCE.withDefault(),
-                    BlockTraits.VALID_BLOCK_ENTITY.with(BlockEntityType.CHEST),
+                    BlockTraits.VALID_BLOCK_ENTITY.with(net.minecraft.world.level.block.entity.BlockEntityTypes.CHEST),
                     BlockTraits.LOOT_TABLE.dropNamedEntity()
             );
         } else {
             return combine(
                     DEFAULT,
-                    BlockTraits.VALID_BLOCK_ENTITY.with(BlockEntityType.CHEST),
+                    BlockTraits.VALID_BLOCK_ENTITY.with(net.minecraft.world.level.block.entity.BlockEntityTypes.CHEST),
                     ClientBlockTraits.CHEST_RENDERER.withDefault()
             );
         }
@@ -61,13 +62,13 @@ public class ChestBlockBuilder extends AbstractBlockTraitBuilder.Generic impleme
         var pool = LootPool.lootPool()
                            .setRolls(ConstantValue.exactly(1.0f))
                            .add(LootItem.lootTableItem(block).apply(CopyComponentsFunction
-                                   .copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                                   .copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY)
                                    .include(DataComponents.CUSTOM_NAME)
                                    .include(DataComponents.CONTAINER)
                                    .include(DataComponents.LOCK)
                                    .include(DataComponents.CONTAINER_LOOT)))
                            .when(ExplosionCondition.survivesExplosion());
-        builder.setRandomSequence(blockKey.location());
+        builder.setRandomSequence(blockKey.identifier());
 
         return builder.withPool(pool);
     }

@@ -8,6 +8,6 @@
  * ({@link org.betterx.wover.structure.api.structures.nbt.RandomNbtStructurePiece}) it generates.
  * <p>
  * Build one via {@link org.betterx.wover.structure.api.builders.RandomNbtBuilder}, created through
- * {@link org.betterx.wover.structure.api.StructureManager#randomNbt(net.minecraft.resources.ResourceLocation)}.
+ * {@link org.betterx.wover.structure.api.StructureManager#randomNbt(net.minecraft.resources.Identifier)}.
  */
 package org.betterx.wover.structure.api.structures.nbt;

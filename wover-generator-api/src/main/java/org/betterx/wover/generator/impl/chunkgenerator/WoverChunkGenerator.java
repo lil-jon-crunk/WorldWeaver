@@ -21,7 +21,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.SurfaceRuleData;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -37,7 +37,7 @@ public class WoverChunkGenerator extends NoiseBasedChunkGenerator implements
         InjectableSurfaceRules<WoverChunkGenerator>,
         EnforceableChunkGenerator<WoverChunkGenerator>,
         RebuildableFeaturesPerStep<WoverChunkGenerator> {
-    public static final ResourceLocation ID = LibWoverWorldGenerator.C.id("betterx");
+    public static final Identifier ID = LibWoverWorldGenerator.C.id("betterx");
 
     protected static final NoiseSettings NETHER_NOISE_SETTINGS_AMPLIFIED = NoiseSettings.create(0, 256, 1, 4);
     public static final ResourceKey<NoiseGeneratorSettings> AMPLIFIED_NETHER = ResourceKey.create(
@@ -133,7 +133,7 @@ public class WoverChunkGenerator extends NoiseBasedChunkGenerator implements
             Registry<LevelStem> dimensionRegistry
     ) {
         LibWoverWorldGenerator.C.log.info("Enforcing Correct Generator for " + dimensionKey
-                .location()
+                .identifier()
                 .toString() + ".");
 
         ChunkGenerator referenceGenerator = this;
@@ -177,12 +177,8 @@ public class WoverChunkGenerator extends NoiseBasedChunkGenerator implements
                 NETHER_NOISE_SETTINGS_AMPLIFIED,
                 Blocks.NETHERRACK.defaultBlockState(),
                 Blocks.LAVA.defaultBlockState(),
-                NoiseRouterData.noNewCaves(
-                        densityGetter,
-                        bootstapContext.lookup(Registries.NOISE),
-                        NoiseRouterData.slideNetherLike(densityGetter, 0, 256)
-                ),
-                SurfaceRuleData.nether(),
+                NoiseRouterData.nether(densityGetter, bootstapContext.lookup(Registries.NOISE)),
+                SurfaceRuleData.nether(bootstapContext.lookup(Registries.BIOME)),
                 List.of(),
                 32,
                 false,

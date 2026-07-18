@@ -28,7 +28,7 @@ import org.jetbrains.annotations.ApiStatus;
 public class WoverChunkGeneratorImpl {
     public static final ResourceKey<NoiseGeneratorSettings> LEGACY_AMPLIFIED_NETHER = ResourceKey.create(
             Registries.NOISE_SETTINGS,
-            LegacyHelper.BCLIB_CORE.convertNamespace(WoverChunkGenerator.AMPLIFIED_NETHER.location())
+            LegacyHelper.BCLIB_CORE.convertNamespace(WoverChunkGenerator.AMPLIFIED_NETHER.identifier())
     );
 
     @ApiStatus.Internal
@@ -138,7 +138,7 @@ public class WoverChunkGeneratorImpl {
         //copy all other dimensions
         for (Map.Entry<ResourceKey<LevelStem>, LevelStem> entry : dimensionRegistry) {
             final ResourceKey<LevelStem> resourceKey = entry.getKey();
-            if (dimensionKey.location().equals(resourceKey.location())) continue;
+            if (dimensionKey.identifier().equals(resourceKey.identifier())) continue;
 
             registerHelper.register(writableRegistry, resourceKey, entry.getValue());
         }

@@ -5,10 +5,12 @@ import org.betterx.wover.surface.api.Conditions;
 import org.betterx.wover.surface.api.SurfaceRuleBuilder;
 import org.betterx.wover.surface.api.SurfaceRuleRegistry;
 import org.betterx.wover.surface.api.conditions.NoiseCondition;
+import org.betterx.wover.state.api.WorldState;
 import org.betterx.wover.util.PriorityLinkedList;
 
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -311,7 +313,10 @@ public class SurfaceRuleBuilderImpl<T extends BaseSurfaceRuleBuilder<T>> impleme
     public SurfaceRules.RuleSource build() {
         SurfaceRules.RuleSource rule = getRuleSource();
         if (biomeKey != null) {
-            rule = SurfaceRules.ifTrue(SurfaceRules.isBiome(biomeKey), rule);
+            rule = SurfaceRules.ifTrue(
+                    SurfaceRules.isBiome(WorldState.registryAccess().lookupOrThrow(Registries.BIOME), biomeKey),
+                    rule
+            );
         }
         return rule;
     }
@@ -342,7 +347,7 @@ public class SurfaceRuleBuilderImpl<T extends BaseSurfaceRuleBuilder<T>> impleme
                 @NotNull ResourceKey<AssignedSurfaceRule> key
         ) {
             if (biomeKey == null) {
-                throw new IllegalStateException("Biome key is not set for surface rule '" + key.location() + "'");
+                throw new IllegalStateException("Biome key is not set for surface rule '" + key.identifier() + "'");
             }
 
             return SurfaceRuleRegistryImpl.register(ctx, key, biomeKey, getRuleSource(), sortPriority);

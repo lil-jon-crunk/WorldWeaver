@@ -52,7 +52,6 @@ public class TrapdoorBlockBuilder extends AbstractBlockTraitBuilder.Generic impl
 
             if (ModCore.isDatagen()) {
                 definition.addTags(BlockTags.TRAPDOORS);
-                definition.addItemTags(ItemTags.TRAPDOORS);
 
                 if (definition.hasTrait(BlockTraits.WOOD_BLOCK)) {
                     definition.addTags(BlockTags.WOODEN_TRAPDOORS);

@@ -34,7 +34,6 @@ public class TestBlockRegistry {
             )
             .addTrait(FlammableBlockBuilder.BUILDER.withDefault())
             .addTags(BlockTags.DOORS)
-            .addItemTags(ItemTags.DOORS)
             .pushReaction(PushReaction.DESTROY)
             .buildAndRegister();
 

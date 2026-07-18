@@ -31,7 +31,7 @@ public class TestModWoverSets implements ModInitializer {
 //                (def) -> new WallHangingSignBlock(woodBlockSet.woodType(), def.getProperties()),
 //                HangingSignItem::new
 //        )
-//                .addTrait(BlockTraits.VALID_BLOCK_ENTITY.with(BlockEntityType.HANGING_SIGN))
+//                .addTrait(BlockTraits.VALID_BLOCK_ENTITY.with(net.minecraft.world.level.block.entity.BlockEntityTypes.HANGING_SIGN))
 //                .buildAndRegisterSign();
 
 //        var boat = ItemRegistry

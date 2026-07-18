@@ -14,8 +14,8 @@
  * MY_PROCESSOR.bootstrap(context)
  *             .startRule()
  *             .startProcessor()
- *             .inputPredicateRandom(Blocks.RED_GLAZED_TERRACOTTA, 0.33f)
- *             .outputState(Blocks.RED_CONCRETE)
+ *             .inputPredicateRandom(Blocks.GLAZED_TERRACOTTA.red(), 0.33f)
+ *             .outputState(Blocks.CONCRETE.red())
  *             .endProcessor()
  *             .endRule()
  *             .register();</pre>

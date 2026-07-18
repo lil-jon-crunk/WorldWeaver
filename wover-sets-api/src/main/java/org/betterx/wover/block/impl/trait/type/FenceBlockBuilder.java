@@ -39,7 +39,6 @@ public class FenceBlockBuilder extends AbstractBlockTraitBuilder.Generic impleme
 
             if (ModCore.isDatagen()) {
                 definition.addTags(BlockTags.FENCES);
-                definition.addItemTags(ItemTags.FENCES);
 
                 if (definition.hasTrait(BlockTraits.WOOD_BLOCK)) {
                     definition.addTags(BlockTags.WOODEN_FENCES);

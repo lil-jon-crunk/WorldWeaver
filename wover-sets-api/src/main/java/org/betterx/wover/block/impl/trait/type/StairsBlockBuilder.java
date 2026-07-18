@@ -34,7 +34,6 @@ public class StairsBlockBuilder extends AbstractBlockTraitBuilder.Generic implem
         @Override
         public void configure(BlockDefinition<Block, ? extends BlockDefinition<Block, ?>> definition) {
             definition.addTags(BlockTags.STAIRS);
-            definition.addItemTags(ItemTags.STAIRS);
 
             if (definition.hasTrait(BlockTraits.WOOD_BLOCK)) {
                 definition.addTags(BlockTags.WOODEN_STAIRS);

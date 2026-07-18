@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "wover-block",
-  "version": "21.7.0",
+  "version": "26.2.0",
   "name": "WorldWeaver - Block and Item API",
   "description": "",
   "authors": [
@@ -29,10 +29,10 @@
     "wover.poi.mixins.common.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.0",
-    "minecraft": ["1.21.6", "1.21.7"],
-    "java": ">=21",
-    "fabric-api": ">=0.100.0"
+    "fabricloader": ">=0.19.3",
+    "minecraft": ["26.2"],
+    "java": ">=25",
+    "fabric-api": ">=0.155.2+26.2"
   },
   "custom": {
     "modmenu": {

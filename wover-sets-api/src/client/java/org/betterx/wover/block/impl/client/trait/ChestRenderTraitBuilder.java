@@ -41,7 +41,7 @@ public class ChestRenderTraitBuilder extends AbstractBlockTraitBuilder<Block, Ch
 
         @Override
         public void configure(BlockDefinition<Block, ? extends BlockDefinition<Block, ?>> definition) {
-            final var location = definition.blockKey.location();
+            final var location = definition.blockKey.identifier();
 
             material = new ChestMaterialSet(
                     CHEST_MAPPER.apply(location),

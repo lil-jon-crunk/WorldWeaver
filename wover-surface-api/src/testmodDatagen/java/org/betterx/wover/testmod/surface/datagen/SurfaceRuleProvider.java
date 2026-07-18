@@ -58,7 +58,7 @@ public class SurfaceRuleProvider extends WoverRegistryContentProvider<AssignedSu
                 .start()
                 .biome(Biomes.BEACH)
                 .surface(Blocks.CHERRY_PLANKS.defaultBlockState())
-                .subsurface(Blocks.WHITE_CONCRETE.defaultBlockState(), 5)
+                .subsurface(Blocks.CONCRETE.white().defaultBlockState(), 5)
                 .register(ctx, TEST_BEACH);
 
         SurfaceRuleBuilder
@@ -81,14 +81,14 @@ public class SurfaceRuleProvider extends WoverRegistryContentProvider<AssignedSu
                                 SurfaceRules.ON_FLOOR,
                                 SurfaceRules.ifTrue(
                                         Conditions.roughNoise(Noises.NETHERRACK, 0.19),
-                                        SurfaceRules.state(Blocks.PURPLE_CONCRETE.defaultBlockState())
+                                        SurfaceRules.state(Blocks.CONCRETE.purple().defaultBlockState())
                                 )
                         ),
                         SurfaceRules.ifTrue(
                                 Conditions.NETHER_VOLUME_NOISE_LARGE,
-                                SurfaceRules.state(Blocks.LIGHT_BLUE_CONCRETE.defaultBlockState())
+                                SurfaceRules.state(Blocks.CONCRETE.lightBlue().defaultBlockState())
                         ),
-                        SurfaceRules.state(Blocks.WHITE_CONCRETE.defaultBlockState())
+                        SurfaceRules.state(Blocks.CONCRETE.white().defaultBlockState())
                 ))
                 .register(ctx, TEST_FLOWER_FORREST);
     }

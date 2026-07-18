@@ -1,16 +1,16 @@
 package org.betterx.wover.feature.api.configured.configurators;
 
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.RandomPatchFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import org.betterx.wover.feature.api.features.WoverRandomPatchFeature;
+import org.betterx.wover.feature.api.features.config.WoverRandomPatchConfiguration;
 
 /**
- * Places random Blocks in a Patch ({@link RandomPatchFeature}).
+ * Places random Blocks in a Patch ({@link WoverRandomPatchFeature}).
  * <p>
  * Similar to {@link RandomPatch}, but instead of defining a {@link net.minecraft.world.level.levelgen.placement.PlacedFeature}
  * you can define a set of Blocks that are arrange in the patch.
  */
-public interface WeightedBlockPatch extends BaseWeightedBlock<RandomPatchConfiguration, RandomPatchFeature, WeightedBlockPatch>, BasePatch<RandomPatchConfiguration, RandomPatchFeature, WeightedBlockPatch> {
+public interface WeightedBlockPatch extends BaseWeightedBlock<WoverRandomPatchConfiguration, WoverRandomPatchFeature, WeightedBlockPatch>, BasePatch<WoverRandomPatchConfiguration, WoverRandomPatchFeature, WeightedBlockPatch> {
     /**
      * Ensures that the position where the Block is placed is empty.
      *

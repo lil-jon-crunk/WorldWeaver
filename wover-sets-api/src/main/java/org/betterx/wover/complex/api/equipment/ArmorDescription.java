@@ -10,7 +10,7 @@ import org.betterx.wover.recipe.api.RecipeBuilder;
 
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -71,7 +71,7 @@ public record ArmorDescription<I extends Item>(I item, ResourceKey<Item> itemKey
                         .BUILDER
                         .with((key, item, context) -> addRecipe(
                                 context,
-                                itemDefinition.itemKey.location(),
+                                itemDefinition.itemKey.identifier(),
                                 item,
                                 equipmentSet.armorTier,
                                 slot,
@@ -85,7 +85,7 @@ public record ArmorDescription<I extends Item>(I item, ResourceKey<Item> itemKey
 
     private static void addRecipe(
             RecipeBuilder.Context context,
-            ResourceLocation location,
+            Identifier location,
             Item item,
             ArmorTier tier,
             ArmorSlot slot,

@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.tags.FeatureTags;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import com.google.common.base.Suppliers;
@@ -73,7 +74,7 @@ public class GenerationSettingsWorker {
         if (customizedFeatures != null && generationSettings instanceof BiomeGenerationSettingsAccessor accessor) {
             accessor.wover_setFeatures(ImmutableList.copyOf(customizedFeatures));
             accessor.wover_setFeatureSet(Suppliers.memoize(this::createPlacedFeatrueSet));
-            accessor.wover_setFlowerFeatures(Suppliers.memoize(this::createFlowerFeatures));
+            accessor.wover_setBoneMealFeatures(Suppliers.memoize(this::createFlowerFeatures));
 
             customizedFeatures = null;
         }
@@ -93,7 +94,8 @@ public class GenerationSettingsWorker {
     private List<ConfiguredFeature<?, ?>> createFlowerFeatures() {
         return getFlatFeatureStream()
                 .flatMap(PlacedFeature::getFeatures)
-                .filter((configured) -> configured.feature() == Feature.FLOWER)
+                .filter(configured -> configured.is(FeatureTags.CAN_SPAWN_FROM_BONE_MEAL))
+                .map(Holder::value)
                 .collect(ImmutableList.toImmutableList());
     }
 

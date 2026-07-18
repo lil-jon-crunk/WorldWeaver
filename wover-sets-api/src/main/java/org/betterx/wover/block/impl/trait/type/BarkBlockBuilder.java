@@ -64,7 +64,6 @@ public class BarkBlockBuilder extends AbstractBlockTraitBuilder.Generic implemen
             definition.addItemTags(ItemTags.LOGS);
 
             if (definition.hasTrait(BlockTraits.FLAMMABLE)) {
-                definition.addTags(BlockTags.LOGS_THAT_BURN);
             }
         }
     }

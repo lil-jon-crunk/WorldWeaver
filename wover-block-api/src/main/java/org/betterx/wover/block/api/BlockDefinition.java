@@ -697,7 +697,7 @@ public abstract class BlockDefinition<B extends Block, D extends BlockDefinition
      */
     @SuppressWarnings("unchecked")
     public D noCollission() {
-        queueProperty((properties) -> properties.noCollission());
+        queueProperty((properties) -> properties.noCollision());
         return (D) this;
     }
 
@@ -982,7 +982,9 @@ public abstract class BlockDefinition<B extends Block, D extends BlockDefinition
      */
     @SuppressWarnings("unchecked")
     public D hasPostProcess(BlockBehaviour.StatePredicate predicate) {
-        queueProperty((properties) -> properties.hasPostProcess(predicate));
+        queueProperty((properties) -> properties.postProcess(
+                (state, level, pos) -> predicate.test(state, level, pos) ? pos : null
+        ));
         return (D) this;
     }
 
@@ -994,7 +996,9 @@ public abstract class BlockDefinition<B extends Block, D extends BlockDefinition
      */
     @SuppressWarnings("unchecked")
     public D emissiveRendering(BlockBehaviour.StatePredicate predicate) {
-        queueProperty((properties) -> properties.emissiveRendering(predicate));
+        queueProperty((properties) -> properties.emissiveRendering(
+                state -> predicate.test(state, null, null)
+        ));
         return (D) this;
     }
 

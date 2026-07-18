@@ -9,14 +9,14 @@ import org.betterx.wover.item.api.trait.AbstractItemTraitBuilder;
 import org.betterx.wover.item.api.trait.ItemTraitKey;
 import org.betterx.wover.item.impl.trait.ItemTraitImpl;
 
-import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.world.item.BoatItem;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
 import org.jetbrains.annotations.Nullable;
@@ -62,12 +62,12 @@ public class BoatRendererTraitBuilder extends AbstractItemTraitBuilder<BoatItem,
         ) {
             if (definition instanceof BoatItemDefinition<?> boatDefinition) {
                 final var modelLocation = new ModelLayerLocation(
-                        definition.itemKey.location()
+                        definition.itemKey.identifier()
                                           .withPrefix(withChest ? "chest_boat/" : "boat/"),
                         "main"
                 );
 
-                EntityModelLayerRegistry.registerModelLayer(
+                ModelLayerRegistry.registerModelLayer(
                         modelLocation,
                         withChest
                                 ? BoatModel::createChestBoatModel

@@ -22,7 +22,7 @@ public class SignBlockBuilder extends AbstractBlockTraitBuilder.Generic implemen
         super(BlockTraitKey.ofUnique(LibWoverSets.C, "is_sign"));
         DEFAULT = combine(
                 new Trait(),
-                BlockTraits.VALID_BLOCK_ENTITY.with(BlockEntityType.SIGN),
+                BlockTraits.VALID_BLOCK_ENTITY.with(net.minecraft.world.level.block.entity.BlockEntityTypes.SIGN),
                 BlockTraits.LOOT_TABLE.dropSelf()
         );
     }

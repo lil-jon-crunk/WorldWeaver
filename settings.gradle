@@ -23,7 +23,7 @@ ext.knownWoverModules.each { module ->
 def allowLocalLibUse = true
 
 //When true, the local lib is also used in commandline builds
-def allowLocalLibInConsoleMode = false
+def allowLocalLibInConsoleMode = true
 
 def WunderLibPath = '../WunderLib'
 

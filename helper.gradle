@@ -97,7 +97,7 @@ modrinth {
     projectId = project.archives_base_name
     versionNumber = project.mod_version
     versionType = project.release_channel
-    uploadFile = remapJar
+    uploadFile = jar
     gameVersions = slurper.parseText(project.modrinth_versions)
     loaders = ["fabric"]
     changelog = changes
@@ -114,6 +114,7 @@ modrinth {
     debugMode = false
 }
 
+if (plugins.hasPlugin("com.matthewprenger.cursegradle")) {
 curseforge {
     def slurper = new groovy.json.JsonSlurper()
     apiKey = new File(projectDir, "../CURSEFORGE_TOKEN")
@@ -142,7 +143,7 @@ curseforge {
             latestVersion = "[$v]"
         }
         addGameVersion 'Fabric'
-        addGameVersion 'Java 21'
+        addGameVersion 'Java 25'
         relations {
             requiredDependencies.each { dep ->
                 requiredDependency dep
@@ -152,11 +153,11 @@ curseforge {
                 optionalDependency dep
             }
         }
-        mainArtifact(remapJar) {
+        mainArtifact(jar) {
             displayName = "$project.archives_base_name-$project.version $latestVersion"
         }
         afterEvaluate {
-            mainArtifact(remapJar.outputs)
+            mainArtifact(jar.outputs)
         }
     }
 
@@ -164,6 +165,7 @@ curseforge {
         debug = false
         forgeGradleIntegration = false
     }
+}
 }
 
 
@@ -231,7 +233,7 @@ task nextVersion() {
 import org.kohsuke.github.GHReleaseBuilder
 import org.kohsuke.github.GitHub
 
-task github(dependsOn: [build, remapJar, sourcesJar, javadocJar]) {
+task github(dependsOn: [build, jar, sourcesJar, javadocJar]) {
     group = 'publishing'
     def slurper = new groovy.json.JsonSlurper()
     def apiKey = new File(projectDir, "../GITHUB_TOKEN")
@@ -286,22 +288,23 @@ subprojects {
                     version = project.version
 
                     // Ensure remapJar is included
-                    artifact(tasks.named('remapJar').get()) {
-                        classifier "remapped-${project.name}"
-                        builtBy tasks.named('remapJar').get()
+                    artifact(tasks.named('jar').get()) {
+                        builtBy tasks.named('jar').get()
                     }
                 }
             }
 
             repositories {
                 maven {
-                    def slurper = new groovy.json.JsonSlurper()
-                    def apiKey = slurper.parseText(new File(rootProject.projectDir, "../AMBER_TOKEN").text)
                     name = "Ambertation"
                     url = "https://maven.ambertation.de/releases/"
-                    credentials {
-                        username = apiKey.username
-                        password = apiKey.token
+                    def tokenFile = new File(rootProject.projectDir, "../AMBER_TOKEN")
+                    if (tokenFile.exists()) {
+                        def apiKey = new groovy.json.JsonSlurper().parseText(tokenFile.text)
+                        credentials {
+                            username = apiKey.username
+                            password = apiKey.token
+                        }
                     }
                 }
             }
@@ -315,11 +318,11 @@ publishing {
             def githubName = findProperty('github_base_name') ?: project.archives_base_name
             artifactId = project.archives_base_name
             // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
+            artifact(jar) {
+                builtBy jar
             }
             artifact(sourcesJar) {
-                builtBy remapSourcesJar
+                builtBy sourcesJar
             }
 
             // Optional POM configuration
@@ -365,14 +368,16 @@ publishing {
     }
     repositories {
         maven {
-            def slurper = new groovy.json.JsonSlurper();
-            def apiKey = slurper.parseText(new File(projectDir, "../AMBER_TOKEN").text)
             println "\nPublishing ${project.archives_base_name} to Maven..."
             name = "Ambertation"
             url = "https://maven.ambertation.de/releases/"
-            credentials {
-                username = apiKey.username
-                password = apiKey.token
+            def tokenFile = new File(projectDir, "../AMBER_TOKEN")
+            if (tokenFile.exists()) {
+                def apiKey = new groovy.json.JsonSlurper().parseText(tokenFile.text)
+                credentials {
+                    username = apiKey.username
+                    password = apiKey.token
+                }
             }
         }
     }

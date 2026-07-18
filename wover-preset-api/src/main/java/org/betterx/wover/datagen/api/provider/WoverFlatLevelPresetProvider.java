@@ -14,8 +14,8 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorPreset;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class WoverFlatLevelPresetProvider
         extends WoverRegistryContentProvider<FlatLevelGeneratorPreset>
-        implements WoverDataProvider.Secondary<FabricTagProvider<FlatLevelGeneratorPreset>> {
+        implements WoverDataProvider.Secondary<FabricTagsProvider<FlatLevelGeneratorPreset>> {
 
     /**
      * Creates a new instance of {@link WoverRegistryContentProvider}.
@@ -48,8 +48,8 @@ public abstract class WoverFlatLevelPresetProvider
      * @return A new {@link DataProvider}
      */
     @Override
-    public FabricTagProvider<FlatLevelGeneratorPreset> getSecondaryProvider(
-            FabricDataOutput output,
+    public FabricTagsProvider<FlatLevelGeneratorPreset> getSecondaryProvider(
+            FabricPackOutput output,
             CompletableFuture<HolderLookup.Provider> registriesFuture
     ) {
         return new FlatLevelTagProvider(modCore).getProvider(output, registriesFuture);

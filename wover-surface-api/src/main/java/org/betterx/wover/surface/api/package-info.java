@@ -23,8 +23,8 @@
  *        SurfaceRuleBuilder
  *                .start()
  *                .biome(Biomes.MEADOW)
- *                .surface(Blocks.LIME_CONCRETE.defaultBlockState())
- *                .steep(Blocks.ORANGE_CONCRETE.defaultBlockState(), 3)
+ *                .surface(Blocks.CONCRETE.lime().defaultBlockState())
+ *                .steep(Blocks.CONCRETE.orange().defaultBlockState(), 3)
  *                .register(ctx, TEST_MEADOW);
  *    }
  * }</pre>
@@ -42,8 +42,8 @@
  *             .start()
  *             .biome(Biomes.SAVANNA)
  *             .chancedFloor(
- *                 Blocks.RED_TERRACOTTA.defaultBlockState(),
- *                 Blocks.RED_CONCRETE.defaultBlockState()
+ *                 Blocks.DYED_TERRACOTTA.red().defaultBlockState(),
+ *                 Blocks.CONCRETE.red().defaultBlockState()
  *             )
  *             .register(ctx, TEST_SAVANA);
  *     });

@@ -34,7 +34,6 @@ public class SlabBlockBuilder extends AbstractBlockTraitBuilder.Generic implemen
         @Override
         public void configure(BlockDefinition<Block, ? extends BlockDefinition<Block, ?>> definition) {
             definition.addTags(BlockTags.SLABS);
-            definition.addItemTags(ItemTags.SLABS);
 
             if (definition.hasTrait(BlockTraits.WOOD_BLOCK)) {
                 definition.addTags(BlockTags.WOODEN_SLABS);

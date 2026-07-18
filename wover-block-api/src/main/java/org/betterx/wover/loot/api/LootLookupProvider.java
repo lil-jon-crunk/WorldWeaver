@@ -2,7 +2,7 @@ package org.betterx.wover.loot.api;
 
 import org.betterx.wover.tag.api.predefined.CommonItemTags;
 
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.predicates.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.predicates.DataComponentPredicates;
@@ -472,19 +472,17 @@ public class LootLookupProvider {
             Property<T> property,
             T comparable
     ) {
+        LootPoolEntryContainer.Builder<?> drop = LootItem.lootTableItem(withoutSilkTouch)
+                .when(LootItemBlockStatePropertyCondition
+                        .hasBlockStateProperties(withSilkTouch)
+                        .setProperties(StatePropertiesPredicate.Builder
+                                .properties()
+                                .hasProperty(property, comparable))
+                )
+                .apply(SetItemCountFunction.setCount(numberProvider));
         return vanillaBlockLoot.createSilkTouchDispatchTable(
                 withSilkTouch,
-                vanillaBlockLoot.applyExplosionCondition(
-                        withSilkTouch,
-                        LootItem.lootTableItem(withoutSilkTouch)
-                                .when(LootItemBlockStatePropertyCondition
-                                        .hasBlockStateProperties(withSilkTouch)
-                                        .setProperties(net.minecraft.advancements.critereon.StatePropertiesPredicate.Builder
-                                                .properties()
-                                                .hasProperty(property, comparable))
-                                )
-                                .apply(SetItemCountFunction.setCount(numberProvider))
-                )
+                vanillaBlockLoot.applyExplosionCondition(withSilkTouch, drop)
         );
     }
 
@@ -511,7 +509,7 @@ public class LootLookupProvider {
                         .add(LootItem.lootTableItem(withSilkTouch)
                                      .when(LootItemBlockStatePropertyCondition
                                              .hasBlockStateProperties(withSilkTouch)
-                                             .setProperties(net.minecraft.advancements.critereon.StatePropertiesPredicate.Builder
+                                             .setProperties(StatePropertiesPredicate.Builder
                                                      .properties()
                                                      .hasProperty(property, comparable))
                                      )

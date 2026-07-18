@@ -41,20 +41,23 @@ public class SurfaceRuleUtil {
         if (registry == null) {
             LibWoverSurface.C.LOG.warn(
                     "No Surface Rule Registry found. Skipping Surface Rule Injection for Biome {}",
-                    biomeKey.location()
+                    biomeKey.identifier()
             );
             return List.of();
         }
 
         var list = registry.stream()
-                           .filter(a -> a != null && a.biomeID != null && a.biomeID.equals(biomeKey.location()))
+                           .filter(a -> a != null && a.biomeID != null && a.biomeID.equals(biomeKey.identifier()))
                            .sorted((a, b) -> b.priority - a.priority)
                            .map(a -> a.ruleSource)
                            .toList();
 
         if (list.size() == 0) return List.of();
 
-        return List.of(SurfaceRules.ifTrue(SurfaceRules.isBiome(biomeKey), new SurfaceRules.SequenceRuleSource(list)));
+        return List.of(SurfaceRules.ifTrue(
+                SurfaceRules.isBiome(WorldState.registryAccess().lookupOrThrow(Registries.BIOME), biomeKey),
+                new SurfaceRules.SequenceRuleSource(list)
+        ));
     }
 
     private static List<SurfaceRules.RuleSource> getRulesForBiomes(List<Optional<ResourceKey<Biome>>> biomes) {
@@ -109,7 +112,7 @@ public class SurfaceRuleUtil {
         LibWoverSurface.C.LOG.verbose(
                 "Merged {} additional Surface Rules for Dimension {} => {} ({}) using {}",
                 count,
-                dimensionKey.location(),
+                dimensionKey.identifier(),
                 additionalRules.size(),
                 sw.stop(),
                 source

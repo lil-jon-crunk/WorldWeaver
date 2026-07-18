@@ -63,7 +63,6 @@ public class LogBlockBuilder extends AbstractBlockTraitBuilder.Generic implement
             definition.addItemTags(ItemTags.LOGS);
 
             if (definition.hasTrait(BlockTraits.FLAMMABLE)) {
-                definition.addTags(BlockTags.LOGS_THAT_BURN);
             }
         }
     }

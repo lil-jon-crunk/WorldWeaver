@@ -7,17 +7,17 @@ import org.betterx.wover.feature.api.placed.BasePlacedFeatureKey;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.RandomPatchFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import org.betterx.wover.feature.api.features.WoverRandomPatchFeature;
+import org.betterx.wover.feature.api.features.config.WoverRandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RandomPatchImpl extends FeatureConfiguratorImpl<RandomPatchConfiguration, RandomPatchFeature> implements RandomPatch {
+public class RandomPatchImpl extends FeatureConfiguratorImpl<WoverRandomPatchConfiguration, WoverRandomPatchFeature> implements RandomPatch {
     private Holder<PlacedFeature> featureToPlace;
     private int tries = 96;
     private int xzSpread = 7;
@@ -75,20 +75,20 @@ public class RandomPatchImpl extends FeatureConfiguratorImpl<RandomPatchConfigur
     }
 
     @Override
-    protected @NotNull RandomPatchFeature getFeature() {
-        return (RandomPatchFeature) Feature.RANDOM_PATCH;
+    protected @NotNull WoverRandomPatchFeature getFeature() {
+        return (WoverRandomPatchFeature) org.betterx.wover.feature.impl.FeatureManagerImpl.RANDOM_PATCH;
     }
 
     @Override
-    protected @NotNull RandomPatchConfiguration createConfiguration() {
+    protected @NotNull WoverRandomPatchConfiguration createConfiguration() {
         if (featureToPlace == null) {
             throwStateError("No PlacedFeature was provided.");
         }
-        return new RandomPatchConfiguration(tries, xzSpread, ySpread, featureToPlace);
+        return new WoverRandomPatchConfiguration(tries, xzSpread, ySpread, featureToPlace);
     }
 
     public static class Key extends ConfiguredFeatureKey<RandomPatch> {
-        public Key(ResourceLocation id) {
+        public Key(Identifier id) {
             super(id);
         }
 

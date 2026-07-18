@@ -14,6 +14,7 @@ import org.betterx.wover.sets.api.blocks.SlotType;
 
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.sounds.SoundEvents;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -41,7 +42,12 @@ public class Chest extends SlotFromDefinition {
     ) {
         return registry.defineDefaultBlock(
                 name,
-                (def) -> new ChestBlock(() -> BlockEntityType.CHEST, def.getProperties())
+                (def) -> new ChestBlock(
+                        () -> net.minecraft.world.level.block.entity.BlockEntityTypes.CHEST,
+                        SoundEvents.CHEST_OPEN,
+                        SoundEvents.CHEST_CLOSE,
+                        def.getProperties()
+                )
         );
     }
 

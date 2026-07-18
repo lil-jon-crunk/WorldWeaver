@@ -39,7 +39,6 @@ public class ButtonBlockBuilder extends AbstractBlockTraitBuilder.Generic implem
 
             if (ModCore.isDatagen()) {
                 definition.addTags(BlockTags.BUTTONS);
-                definition.addItemTags(ItemTags.BUTTONS);
 
                 if (definition.hasTrait(BlockTraits.WOOD_BLOCK)) {
                     definition.strength(0.5F, 0.5F);
@@ -49,7 +48,6 @@ public class ButtonBlockBuilder extends AbstractBlockTraitBuilder.Generic implem
 
                 if (definition.hasTrait(BlockTraits.STONE_BLOCK)) {
                     definition.addTags(BlockTags.STONE_BUTTONS);
-                    definition.addItemTags(ItemTags.STONE_BUTTONS);
                 }
             }
         }

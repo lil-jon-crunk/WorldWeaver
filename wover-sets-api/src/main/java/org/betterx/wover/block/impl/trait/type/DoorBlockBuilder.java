@@ -59,7 +59,6 @@ public class DoorBlockBuilder extends AbstractBlockTraitBuilder.Generic implemen
 
             if (ModCore.isDatagen()) {
                 definition.addTags(BlockTags.DOORS);
-                definition.addItemTags(ItemTags.DOORS);
 
                 if (definition.hasTrait(BlockTraits.WOOD_BLOCK)) {
                     definition.addTags(BlockTags.WOODEN_DOORS);

@@ -7,6 +7,7 @@ import com.mojang.serialization.Decoder;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.RegistryValidator;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.resources.ResourceManager;
 
@@ -36,8 +37,8 @@ public class RegistryDataLoaderMixin {
         LibWoverCore.C.log.debug("Adding custom WORLDGEN_REGISTRIES");
         DatapackRegistryBuilderImpl.forEach((key, codec) -> {
             if (codec != null) {
-                LibWoverCore.C.log.debug("    - Adding " + key.location());
-                enhanced.add(new RegistryDataLoader.RegistryData(key, codec, false));
+                LibWoverCore.C.log.debug("    - Adding " + key.identifier());
+                enhanced.add(new RegistryDataLoader.RegistryData(key, codec, RegistryValidator.none()));
             }
         });
 

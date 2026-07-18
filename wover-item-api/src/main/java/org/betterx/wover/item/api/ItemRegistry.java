@@ -9,7 +9,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
@@ -153,7 +153,7 @@ public abstract class ItemRegistry {
      * @return A ResourceKey for the item in this mod's namespace
      */
     public @NotNull ResourceKey<EntityType<?>> entityKey(@NotNull ResourceKey<Item> itemKey) {
-        return ResourceKey.create(Registries.ENTITY_TYPE, itemKey.location());
+        return ResourceKey.create(Registries.ENTITY_TYPE, itemKey.identifier());
     }
 
     /**
@@ -388,7 +388,7 @@ public abstract class ItemRegistry {
     ) {
         return defineSpawnEgg(
                 eggName,
-                (def) -> new SpawnEggItem(def.entityType(), def.getProperties())
+                (def) -> new SpawnEggItem(def.getProperties())
         );
     }
 
@@ -524,8 +524,8 @@ public abstract class ItemRegistry {
     @Deprecated(forRemoval = true)
     public SmithingTemplateItem registerSmithingTemplateItem(
             String path,
-            List<ResourceLocation> baseSlotEmptyIcons,
-            List<ResourceLocation> additionalSlotEmptyIcons
+            List<Identifier> baseSlotEmptyIcons,
+            List<Identifier> additionalSlotEmptyIcons
     ) {
         final SmithingTemplateItem item = SmithingTemplates
                 .create(C, path)
@@ -586,6 +586,6 @@ public abstract class ItemRegistry {
                 .entrySet()
                 .stream()
                 .filter(i -> i.getValue() instanceof ItemTagProvider)
-                .forEach(i -> ((ItemTagProvider) i.getValue()).registerItemTags(i.getKey().location(), ctx));
+                .forEach(i -> ((ItemTagProvider) i.getValue()).registerItemTags(i.getKey().identifier(), ctx));
     }
 }

@@ -6,18 +6,18 @@ import org.betterx.wover.feature.api.configured.configurators.WeightedBlockPatch
 
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.RandomPatchFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import org.betterx.wover.feature.api.features.WoverRandomPatchFeature;
+import org.betterx.wover.feature.api.features.config.WoverRandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class WeightedBlockPatchImpl extends WeightedBaseBlockImpl<RandomPatchConfiguration, RandomPatchFeature, WeightedBlockPatch> implements WeightedBlockPatch {
+public class WeightedBlockPatchImpl extends WeightedBaseBlockImpl<WoverRandomPatchConfiguration, WoverRandomPatchFeature, WeightedBlockPatch> implements WeightedBlockPatch {
 
     private BlockPredicate groundType = null;
     private boolean isEmpty = true;
@@ -88,7 +88,7 @@ public class WeightedBlockPatchImpl extends WeightedBaseBlockImpl<RandomPatchCon
     }
 
     @Override
-    public @NotNull RandomPatchConfiguration createConfiguration() {
+    public @NotNull WoverRandomPatchConfiguration createConfiguration() {
         var blockFeature = ConfiguredFeatureManager
                 .INLINE_BUILDER
                 .simple()
@@ -98,17 +98,17 @@ public class WeightedBlockPatchImpl extends WeightedBaseBlockImpl<RandomPatchCon
         if (isEmpty) blockFeature.isEmpty();
         if (groundType != null) blockFeature.isOn(groundType);
 
-        return new RandomPatchConfiguration(tries, xzSpread, ySpread, blockFeature.directHolder());
+        return new WoverRandomPatchConfiguration(tries, xzSpread, ySpread, blockFeature.directHolder());
     }
 
     @Override
-    protected @NotNull RandomPatchFeature getFeature() {
-        return (RandomPatchFeature) Feature.RANDOM_PATCH;
+    protected @NotNull WoverRandomPatchFeature getFeature() {
+        return (WoverRandomPatchFeature) org.betterx.wover.feature.impl.FeatureManagerImpl.RANDOM_PATCH;
     }
 
 
     public static class Key extends ConfiguredFeatureKey<WeightedBlockPatch> {
-        public Key(ResourceLocation id) {
+        public Key(Identifier id) {
             super(id);
         }
 
@@ -119,7 +119,7 @@ public class WeightedBlockPatchImpl extends WeightedBaseBlockImpl<RandomPatchCon
     }
 
     public static class KeyBonemeal extends ConfiguredFeatureKey<WeightedBlockPatch> {
-        public KeyBonemeal(ResourceLocation id) {
+        public KeyBonemeal(Identifier id) {
             super(id);
         }
 

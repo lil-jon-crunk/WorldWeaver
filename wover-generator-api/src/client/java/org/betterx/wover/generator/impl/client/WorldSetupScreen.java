@@ -20,7 +20,7 @@ import org.betterx.wover.ui.impl.client.WelcomeScreen;
 import org.betterx.wover.ui.impl.client.WoverLayoutScreen;
 import org.betterx.wover.util.PriorityLinkedList;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationContext;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
@@ -33,7 +33,7 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
@@ -154,10 +154,10 @@ public class WorldSetupScreen extends LayoutScreen implements BiomeSourceConfigP
     }
 
     private String languageKey(Holder<WorldPreset> key) {
-        return languageKey(key.unwrapKey().orElseThrow().location());
+        return languageKey(key.unwrapKey().orElseThrow().identifier());
     }
 
-    private String languageKey(ResourceLocation key) {
+    private String languageKey(Identifier key) {
         return "generator." + key.getNamespace() + "." + key.getPath();
     }
 
@@ -188,7 +188,7 @@ public class WorldSetupScreen extends LayoutScreen implements BiomeSourceConfigP
                                               .compareTo(language.getOrDefault(languageKey(b))))
                     .forEach(preset -> {
                         final var info = WorldPresetInfoRegistry.getFor(preset);
-                        final ResourceLocation presetKey = preset.unwrapKey().orElseThrow().location();
+                        final Identifier presetKey = preset.unwrapKey().orElseThrow().identifier();
                         final Optional<LevelStem> targetDimension = preset.value()
                                                                           .createWorldDimensions()
                                                                           .get(forDimension);
@@ -216,7 +216,7 @@ public class WorldSetupScreen extends LayoutScreen implements BiomeSourceConfigP
 
             for (DimensionValue dimensionValue : options) {
                 dimensions.addOption(Component.translatable(languageKey(dimensionValue.preset)), dimensionValue);
-                if (finalConfiguredKey != null && dimensionValue.key.location().equals(finalConfiguredKey.location())) {
+                if (finalConfiguredKey != null && dimensionValue.key.identifier().equals(finalConfiguredKey.identifier())) {
                     selectedStem = dimensionValue;
                 }
             }
@@ -238,7 +238,7 @@ public class WorldSetupScreen extends LayoutScreen implements BiomeSourceConfigP
             DimensionContent contentData
     ) {
         VerticalStack content = new VerticalStack(fill(), fit()).centerHorizontal();
-        content.setDebugName("Stack " + contentData.dimensionKey.location());
+        content.setDebugName("Stack " + contentData.dimensionKey.identifier());
         content.addSpacer(16);
         content.addText(fit(), fit(), title).centerHorizontal();
         content.addHorizontalSeparator(8).alignTop();
@@ -364,7 +364,7 @@ public class WorldSetupScreen extends LayoutScreen implements BiomeSourceConfigP
                     LayoutComponent<?, ? extends LayoutComponent<?, ?>> page = contentPage(
                             configuredPreset,
                             Component.translatable("title.screen.wover.worldgen."
-                                    + content.dimensionKey.location().getPath() + "_generator"),
+                                    + content.dimensionKey.identifier().getPath() + "_generator"),
                             content
                     );
 
@@ -373,10 +373,10 @@ public class WorldSetupScreen extends LayoutScreen implements BiomeSourceConfigP
                     }
 
                     main.addPage(
-                            Component.translatable("title.wover." + content.dimensionKey.location().getPath()),
+                            Component.translatable("title.wover." + content.dimensionKey.identifier().getPath()),
                             this.scroller = VerticalScroll
                                     .create(page)
-                                    .setDebugName(content.dimensionKey.location().getPath() + " scroll")
+                                    .setDebugName(content.dimensionKey.identifier().getPath() + " scroll")
                     );
                 });
 
@@ -416,7 +416,7 @@ public class WorldSetupScreen extends LayoutScreen implements BiomeSourceConfigP
     }
 
     @Override
-    public void renderBackgroundLayer(GuiGraphics guiGraphics, int i, int j, float f) {
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int i, int j, float f) {
         guiGraphics.fill(0, 0, width, height, 0xBD343444);
     }
 

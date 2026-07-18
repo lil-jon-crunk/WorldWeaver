@@ -12,7 +12,7 @@ import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.tags.TagKey;
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PoiManagerImpl {
     public static WoverPoiType register(
-            ResourceLocation location,
+            Identifier location,
             Set<BlockState> matchingStates,
             int maxTickets,
             int validRanges,

@@ -23,6 +23,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.attribute.*;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,6 +33,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +46,7 @@ import org.jetbrains.annotations.Nullable;
  * {@link #register()}. There are two concrete builder families:
  * <ul>
  *     <li>{@link Vanilla} — defines a completely new, vanilla-style {@link Biome}, created through
- *     {@link org.betterx.wover.biome.api.BiomeManager#vanilla(net.minecraft.resources.ResourceLocation)}.</li>
+ *     {@link org.betterx.wover.biome.api.BiomeManager#vanilla(net.minecraft.resources.Identifier)}.</li>
  *     <li>{@link Wrapped} — only attaches {@link BiomeData} (fog density, climate parameters, intended
  *     placement) to an already existing Biome, created through
  *     {@link org.betterx.wover.biome.api.BiomeManager#wrapped(ResourceKey)}.</li>
@@ -391,7 +393,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
      * terrain, ambience/fog colors, sounds, particles, mob spawns and features.
      * <p>
      * {@link Vanilla} is the concrete, instantiable version of this builder returned by
-     * {@link org.betterx.wover.biome.api.BiomeManager#vanilla(net.minecraft.resources.ResourceLocation)}.
+     * {@link org.betterx.wover.biome.api.BiomeManager#vanilla(net.minecraft.resources.Identifier)}.
      *
      * @param <B> The concrete builder type, used to return {@code this} with the correct type from every
      *            setter.
@@ -402,6 +404,14 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
         private float temperature;
         private boolean hasPrecipitation;
         private final BiomeSpecialEffects.Builder fx = new BiomeSpecialEffects.Builder();
+        private int fogColor = DEFAULT_FOG_COLOR;
+        private int waterFogColor = DEFAULT_WATER_FOG_COLOR;
+        private int skyColor;
+        private List<AmbientParticle> ambientParticles = List.of();
+        private Holder<SoundEvent> ambientLoopSound;
+        private AmbientMoodSettings ambientMood;
+        private final List<AmbientAdditionsSettings> ambientAdditions = new ArrayList<>();
+        private Music backgroundMusic;
         private final BiomeGenerationSettings.Builder generationSettings;
         private final MobSpawnSettings.Builder mobSpawnSettings = new MobSpawnSettings.Builder();
 
@@ -429,10 +439,8 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
                     bootstrapContext.lookup(Registries.CONFIGURED_CARVER)
             );
 
-            fx.fogColor(DEFAULT_FOG_COLOR);
-            fx.waterFogColor(DEFAULT_WATER_FOG_COLOR);
             fx.waterColor(DEFAULT_WATER_COLOR);
-            fx.skyColor(calculateSkyColor(temperature));
+            skyColor = calculateSkyColor(temperature);
         }
 
 
@@ -600,7 +608,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @return This builder.
          */
         public B fogColor(int color) {
-            fx.fogColor(color);
+            fogColor = color;
             return (B) this;
         }
 
@@ -613,7 +621,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @return This builder.
          */
         public B fogColor(int r, int g, int b) {
-            fx.fogColor(ColorHelper.color(r, g, b));
+            fogColor = ColorHelper.color(r, g, b);
             return (B) this;
         }
 
@@ -659,7 +667,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @return This builder.
          */
         public B waterFogColor(int color) {
-            fx.waterFogColor(color);
+            waterFogColor = color;
             return (B) this;
         }
 
@@ -682,7 +690,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @return This builder.
          */
         public B skyColor(int color) {
-            fx.skyColor(color);
+            skyColor = color;
             return (B) this;
         }
 
@@ -803,7 +811,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @return this builder.
          */
         public B particles(ParticleOptions particle, float probability) {
-            particles(new AmbientParticleSettings(particle, probability));
+            particles(new AmbientParticle(particle, probability));
             return (B) this;
         }
 
@@ -813,8 +821,8 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @param ambientParticleSettings The particle settings.
          * @return This builder.
          */
-        public B particles(AmbientParticleSettings ambientParticleSettings) {
-            fx.ambientParticle(ambientParticleSettings);
+        public B particles(AmbientParticle ambientParticleSettings) {
+            ambientParticles = List.of(ambientParticleSettings);
             return (B) this;
         }
 
@@ -826,7 +834,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @return This builder.
          */
         public B loop(Holder<SoundEvent> holder) {
-            fx.ambientLoopSound(holder);
+            ambientLoopSound = holder;
             return (B) this;
         }
 
@@ -837,7 +845,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @return This builder.
          */
         public B mood(AmbientMoodSettings ambientMoodSettings) {
-            fx.ambientMoodSound(ambientMoodSettings);
+            ambientMood = ambientMoodSettings;
             return (B) this;
         }
 
@@ -876,7 +884,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @return This builder.
          */
         public B additions(AmbientAdditionsSettings ambientAdditionsSettings) {
-            fx.ambientAdditionsSound(ambientAdditionsSettings);
+            ambientAdditions.add(ambientAdditionsSettings);
             return (B) this;
         }
 
@@ -911,7 +919,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
          * @return This builder.
          */
         public B music(@Nullable Music music) {
-            fx.backgroundMusic(music);
+            backgroundMusic = music;
             return (B) this;
         }
 
@@ -1088,6 +1096,26 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
             vanillaBuilder.downfall(downfall);
             vanillaBuilder.temperature(temperature);
             vanillaBuilder.temperatureAdjustment(temperatureModifier);
+            vanillaBuilder.setAttribute(EnvironmentAttributes.FOG_COLOR, fogColor);
+            vanillaBuilder.setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, waterFogColor);
+            vanillaBuilder.setAttribute(EnvironmentAttributes.SKY_COLOR, skyColor);
+            vanillaBuilder.setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, ambientParticles);
+            if (ambientLoopSound != null || ambientMood != null || !ambientAdditions.isEmpty()) {
+                vanillaBuilder.setAttribute(
+                        EnvironmentAttributes.AMBIENT_SOUNDS,
+                        new AmbientSounds(
+                                Optional.ofNullable(ambientLoopSound),
+                                Optional.ofNullable(ambientMood),
+                                List.copyOf(ambientAdditions)
+                        )
+                );
+            }
+            if (backgroundMusic != null) {
+                vanillaBuilder.setAttribute(
+                        EnvironmentAttributes.BACKGROUND_MUSIC,
+                        new BackgroundMusic(backgroundMusic)
+                );
+            }
 
             vanillaBuilder.generationSettings(generationSettings.build());
             vanillaBuilder.specialEffects(fx.build());
@@ -1100,7 +1128,7 @@ public abstract class BiomeBuilder<B extends BiomeBuilder<B>> {
     /**
      * The concrete builder used to define a completely new, vanilla-style {@link Biome}.
      * <p>
-     * Returned by {@link org.betterx.wover.biome.api.BiomeManager#vanilla(net.minecraft.resources.ResourceLocation)}.
+     * Returned by {@link org.betterx.wover.biome.api.BiomeManager#vanilla(net.minecraft.resources.Identifier)}.
      */
     public abstract static class Vanilla extends VanillaBuilder<Vanilla> {
         /**

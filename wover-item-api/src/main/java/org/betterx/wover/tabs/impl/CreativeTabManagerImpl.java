@@ -12,9 +12,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.ItemLike;
-
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -61,9 +60,10 @@ public class CreativeTabManagerImpl implements CreativeTabsBuilder, CreativeTabs
     }
 
     public void registerAllTabs() {
+        int tabIndex = 0;
         for (SimpleCreativeTabImpl tab : tabs) {
-            var tabItem = FabricItemGroup
-                    .builder()
+            var tabItem = CreativeModeTab
+                    .builder(tabIndex < 7 ? CreativeModeTab.Row.TOP : CreativeModeTab.Row.BOTTOM, tabIndex % 7)
                     .icon(() -> new ItemStack(tab.icon))
                     .title(tab.title)
                     .displayItems((displayParameters, output) -> {
@@ -79,6 +79,7 @@ public class CreativeTabManagerImpl implements CreativeTabsBuilder, CreativeTabs
                     tab.key,
                     tabItem
             );
+            tabIndex++;
         }
     }
 }

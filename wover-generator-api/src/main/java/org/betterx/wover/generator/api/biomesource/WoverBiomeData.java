@@ -114,8 +114,8 @@ public class WoverBiomeData extends BiomeData {
         this.edge = edge;
         this.parent = parent;
 
-        this.edgeData = edge == null ? null : BiomeDataRegistry.createKey(edge.location());
-        this.parentData = parent == null ? null : BiomeDataRegistry.createKey(parent.location());
+        this.edgeData = edge == null ? null : BiomeDataRegistry.createKey(edge.identifier());
+        this.parentData = parent == null ? null : BiomeDataRegistry.createKey(parent.identifier());
     }
 
     /**
@@ -173,7 +173,7 @@ public class WoverBiomeData extends BiomeData {
      * subclass add up to seven additional {@link RecordCodecBuilder} fields ({@code p10}...{@code p16}) on
      * top of the base fields, matched by a factory function taking the corresponding number of arguments —
      * mirroring the {@link BiomeData#codec} family this class is itself built on. Use
-     * {@link org.betterx.wover.biome.api.data.BiomeCodecRegistry#register(net.minecraft.resources.ResourceLocation, net.minecraft.util.KeyDispatchDataCodec)}
+     * {@link org.betterx.wover.biome.api.data.BiomeCodecRegistry#register(net.minecraft.resources.Identifier, net.minecraft.util.KeyDispatchDataCodec)}
      * to make the resulting codec usable from a {@code type} field.
      *
      * @param factory the factory used to construct the subclass from the decoded fields

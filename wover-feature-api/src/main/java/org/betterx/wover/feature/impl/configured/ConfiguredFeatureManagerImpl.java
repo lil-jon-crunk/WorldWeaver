@@ -11,7 +11,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import org.betterx.wover.feature.api.features.config.WoverRandomPatchConfiguration;
 
 import java.util.Optional;
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +38,7 @@ public class ConfiguredFeatureManagerImpl {
             boolean asIs
     ) {
         if (!asIs) {
-            if (config instanceof RandomPatchConfiguration rnd) {
+            if (config instanceof WoverRandomPatchConfiguration rnd) {
                 var configured = rnd.feature().value().feature().value();
                 feature = configured.feature();
                 config = configured.config();

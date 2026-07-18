@@ -5,7 +5,7 @@ import org.betterx.wover.core.api.ModCore;
 import org.betterx.wover.datagen.api.provider.multi.WoverBiomeProvider;
 import org.betterx.wover.testmod.entrypoint.TestModWoverWorldGenerator;
 
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 
@@ -34,22 +34,22 @@ public class BiomeProvider extends WoverBiomeProvider {
                 .fogDensity(8.0f)
                 .feature(TestModWoverWorldGenerator.TEST_VEGETATION_PLACED)
                 .feature(TestModWoverWorldGenerator.TEST_SCATTERED_PLACED)
-                .spawn(EntityType.CAMEL, 1, 2, 6)
-                .spawn(EntityType.DONKEY, 2, 1, 3)
+                .spawn(EntityTypes.CAMEL, 1, 2, 6)
+                .spawn(EntityTypes.DONKEY, 2, 1, 3)
                 .register();
 
         TestModWoverWorldGenerator
                 .NETHER_MAIN_BIOME
                 .bootstrap(context)
                 .isNetherBiome()
-                .surface(Blocks.WHITE_CONCRETE)
+                .surface(Blocks.CONCRETE.white())
                 .register();
 
         TestModWoverWorldGenerator
                 .NETHER_SUB_BIOME
                 .bootstrap(context)
                 .isNetherBiome()
-                .surface(Blocks.GRAY_CONCRETE)
+                .surface(Blocks.CONCRETE.gray())
                 .parent(TestModWoverWorldGenerator.NETHER_MAIN_BIOME)
                 .register();
 
@@ -57,7 +57,7 @@ public class BiomeProvider extends WoverBiomeProvider {
                 .NETHER_WASTE_SUB_BIOME
                 .bootstrap(context)
                 .isNetherBiome()
-                .surface(Blocks.ORANGE_CONCRETE)
+                .surface(Blocks.CONCRETE.orange())
                 .parent(Biomes.NETHER_WASTES)
                 .register();
     }

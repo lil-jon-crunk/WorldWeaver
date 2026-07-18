@@ -7,11 +7,12 @@ import org.betterx.wover.recipe.api.RecipeMaterial;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.level.ItemLike;
 
 public class CookingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CookingRecipeBuilder> implements CookingRecipeBuilder {
@@ -22,7 +23,7 @@ public class CookingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CookingRecip
     protected boolean blasting, campfire, smoker, smelting;
 
     public CookingRecipeBuilderImpl(
-            ResourceLocation id,
+            Identifier id,
             ItemLike output,
             boolean blasting,
             boolean campfire,
@@ -163,6 +164,7 @@ public class CookingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CookingRecip
                     SimpleCookingRecipeBuilder.smelting(
                             input.createIngredient(context),
                             category,
+                            CookingBookCategory.MISC,
                             output.getItem(),
                             xp,
                             cookingTime
@@ -176,6 +178,7 @@ public class CookingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CookingRecip
                     SimpleCookingRecipeBuilder.blasting(
                             input.createIngredient(context),
                             category,
+                            CookingBookCategory.MISC,
                             output.getItem(),
                             xp,
                             cookingTime / 2
@@ -215,7 +218,7 @@ public class CookingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CookingRecip
             String suffix,
             SimpleCookingRecipeBuilder builder
     ) {
-        ResourceLocation loc = key.location().withSuffix("_" + suffix);
+        Identifier loc = key.identifier().withSuffix("_" + suffix);
 
         for (var item : unlocks.entrySet()) {
             builder.unlockedBy(item.getKey(), item.getValue().createCriterion(context));

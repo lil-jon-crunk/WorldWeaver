@@ -101,7 +101,7 @@ public class PottablePlantBlockTrait extends BlockTraitImpl<Block, GenericBlockT
                         if (!(trait instanceof PottablePlantBlockTrait plantTrait)) return;
                         PottablePlantRegistry.register(
                                 ctx,
-                                PottablePlantRegistry.createKey(e.getKey().location()),
+                                PottablePlantRegistry.createKey(e.getKey().identifier()),
                                 e.getKey(),
                                 plantTrait.validSoils
                         );

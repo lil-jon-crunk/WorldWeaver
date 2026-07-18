@@ -22,7 +22,7 @@ public class BarrelBlockBuilder extends AbstractBlockTraitBuilder.Generic implem
         super(BlockTraitKey.ofUnique(LibWoverSets.C, "is_barrel"));
         DEFAULT = combine(
                 new Trait(),
-                BlockTraits.VALID_BLOCK_ENTITY.with(BlockEntityType.BARREL),
+                BlockTraits.VALID_BLOCK_ENTITY.with(net.minecraft.world.level.block.entity.BlockEntityTypes.BARREL),
                 BlockTraits.LOOT_TABLE.dropNamedEntity()
         );
     }

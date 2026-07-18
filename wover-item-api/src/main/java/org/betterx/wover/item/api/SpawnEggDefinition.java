@@ -69,10 +69,7 @@ public class SpawnEggDefinition<I extends SpawnEggItem> extends ItemDefinition<I
         @Override
         public @NotNull ItemStack execute(BlockSource blockSource, ItemStack stack) {
             Direction direction = blockSource.state().getValue(DispenserBlock.FACING);
-            EntityType<?> entityType = ((SpawnEggItem) stack.getItem()).getType(
-                    blockSource.level().registryAccess(),
-                    stack
-            );
+            EntityType<?> entityType = SpawnEggItem.getType(stack);
 
             try {
                 entityType.spawn(
@@ -137,6 +134,7 @@ public class SpawnEggDefinition<I extends SpawnEggItem> extends ItemDefinition<I
         if (this.entityType == null) {
             throw new IllegalStateException("Entity type must be set before building spawn egg for: " + this.itemKey);
         }
+        properties.spawnEgg(this.entityType);
     }
 
     /**
@@ -250,9 +248,6 @@ public class SpawnEggDefinition<I extends SpawnEggItem> extends ItemDefinition<I
      * @return A new SpawnEggItem instance configured with the provided settings
      */
     public static SpawnEggItem createSpawnEgg(SpawnEggDefinition<SpawnEggItem> config) {
-        return new SpawnEggItem(
-                config.entityType,
-                config.getProperties()
-        );
+        return new SpawnEggItem(config.getProperties());
     }
 }
