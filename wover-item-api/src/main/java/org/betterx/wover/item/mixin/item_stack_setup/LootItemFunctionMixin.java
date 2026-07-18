@@ -7,18 +7,18 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
+import java.util.function.Consumer;
 
 @Mixin(LootItemFunction.class)
 public interface LootItemFunctionMixin {
-    @ModifyArg(
-            method = "method_514",
-            at = @At(value = "INVOKE", target = "Ljava/util/function/BiFunction;apply(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"),
-            index = 0
+    @ModifyVariable(
+            method = "decorate",
+            at = @At("HEAD"),
+            argsOnly = true
     )
-    private static Object wover_decorate(
-            Object itemStack
-    ) {
-        return ItemStackHelper.callItemStackSetupIfPossible((ItemStack) itemStack);
+    private static Consumer<ItemStack> wover_decorate(Consumer<ItemStack> output) {
+        return itemStack -> output.accept(ItemStackHelper.callItemStackSetupIfPossible(itemStack));
     }
 }
