@@ -3,13 +3,8 @@ package org.betterx.wover.core.mixin.registry;
 import org.betterx.wover.core.impl.registry.DatapackRegistryBuilderImpl;
 import org.betterx.wover.entrypoint.LibWoverCore;
 
-import com.mojang.serialization.Decoder;
-import net.minecraft.core.WritableRegistry;
 import net.minecraft.resources.RegistryDataLoader;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.RegistryValidator;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.resources.ResourceManager;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -20,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Mixin(RegistryDataLoader.class)
 public class RegistryDataLoaderMixin {
@@ -43,24 +37,6 @@ public class RegistryDataLoaderMixin {
         });
 
         wt_set_WORLDGEN_REGISTRIES(enhanced);
-    }
-
-    @Inject(
-            method = "loadContentsFromManager",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/tags/TagLoader;loadTagsForRegistry(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/core/WritableRegistry;)V",
-                    shift = At.Shift.BEFORE
-            )
-    )
-    private static <E> void wover_bootstrap(
-            ResourceManager resourceManager,
-            RegistryOps.RegistryInfoLookup registryInfoLookup,
-            WritableRegistry<E> writableRegistry,
-            Decoder<E> decoder,
-            Map<ResourceKey<?>, Exception> map,
-            CallbackInfo ci
-    ) {
-        DatapackRegistryBuilderImpl.bootstrap(registryInfoLookup, writableRegistry.key(), writableRegistry);
     }
 
     //we moved this over to the register Method in MappedRegistryMixin to catch all registered values, even those
