@@ -10,8 +10,6 @@
     "biomesource.BiomeSourcePrintMixin",
     "biomesource.ServerLevelMixin",
     "biomesource.TheEndBiomesMixin",
-    "DSL.V2551Mixin",
-    "DSL.V2832Mixin",
     "generator.ChunkGeneratorMixin",
     "generator.ChunkGeneratorPrintMixin",
     "generator.NoiseBasedChunkGeneratorMixin"
