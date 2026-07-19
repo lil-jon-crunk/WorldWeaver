@@ -12,8 +12,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.jetbrains.annotations.ApiStatus;
 
 public class NoiseRegistryImpl {
@@ -30,7 +30,7 @@ public class NoiseRegistryImpl {
         return NormalNoise.create(randomSource, holder.value());
     }
 
-    private static final Map<ResourceKey<NormalNoise.NoiseParameters>, NormalNoise> noiseIntances = new HashMap<>();
+    private static final Map<ResourceKey<NormalNoise.NoiseParameters>, NormalNoise> noiseInstances = new ConcurrentHashMap<>();
 
     public static NormalNoise getOrCreateNoise(
             RegistryAccess registryAccess,
@@ -38,7 +38,7 @@ public class NoiseRegistryImpl {
             ResourceKey<NormalNoise.NoiseParameters> noise
     ) {
         final Registry<NormalNoise.NoiseParameters> registry = registryAccess.lookupOrThrow(Registries.NOISE);
-        return noiseIntances.computeIfAbsent(
+        return noiseInstances.computeIfAbsent(
                 noise,
                 (key) -> NoiseRegistryImpl.createNoise(registry, randomSource, noise)
         );

@@ -81,19 +81,19 @@ public class SmithingRecipeBuilderImpl extends BaseRecipeBuilderImpl<SmithingRec
         if (addon == null) {
             throwIllegalStateException("Addon must be set");
         }
-        if (output.getCount() != 1) {
+        if (output.count() != 1) {
             throwIllegalStateException("Output count must be 1");
         }
     }
 
     @Override
     public void build(RecipeBuilder.Context context) {
-        final SmithingTransformRecipeBuilder builder = SmithingTransformRecipeBuilder.smithing(
+        final SmithingTransformRecipeBuilder builder = new SmithingTransformRecipeBuilder(
                 template.createIngredient(context),
                 base.createIngredient(context),
                 addon.createIngredient(context),
                 category,
-                output.getItem()
+                output
         );
 
         for (var item : unlocks.entrySet()) {

@@ -165,7 +165,7 @@ public class CookingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CookingRecip
                             input.createIngredient(context),
                             category,
                             CookingBookCategory.MISC,
-                            output.getItem(),
+                            output.item().value(),
                             xp,
                             cookingTime
                     )
@@ -179,7 +179,7 @@ public class CookingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CookingRecip
                             input.createIngredient(context),
                             category,
                             CookingBookCategory.MISC,
-                            output.getItem(),
+                            output.item().value(),
                             xp,
                             cookingTime / 2
                     )
@@ -192,7 +192,7 @@ public class CookingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CookingRecip
                     SimpleCookingRecipeBuilder.campfireCooking(
                             input.createIngredient(context),
                             category,
-                            output.getItem(),
+                            output.item().value(),
                             xp,
                             cookingTime * 3
                     )
@@ -205,7 +205,7 @@ public class CookingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CookingRecip
                     SimpleCookingRecipeBuilder.smoking(
                             input.createIngredient(context),
                             category,
-                            output.getItem(),
+                            output.item().value(),
                             xp,
                             cookingTime / 2
                     )

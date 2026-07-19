@@ -147,7 +147,8 @@ public class CraftingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CraftingRec
     }
 
     private void buildShaped(RecipeBuilder.Context context) {
-        var builder = ShapedRecipeBuilder.shaped(context.itemLookup(), category, output.getItem(), output.getCount());
+        var builder = ShapedRecipeBuilder.shaped(
+                context.itemLookup(), category, output.item().value(), output.count());
 
         for (Map.Entry<Character, IngredientFactory> mat : materials.entrySet()) {
             builder.define(mat.getKey(), mat.getValue().createIngredient(context));
@@ -170,8 +171,7 @@ public class CraftingRecipeBuilderImpl extends BaseRecipeBuilderImpl<CraftingRec
         var builder = ShapelessRecipeBuilder.shapeless(
                 context.itemLookup(),
                 category,
-                output.getItem(),
-                output.getCount()
+                output
         );
 
         for (Map.Entry<Character, IngredientFactory> mat : materials.entrySet()) {

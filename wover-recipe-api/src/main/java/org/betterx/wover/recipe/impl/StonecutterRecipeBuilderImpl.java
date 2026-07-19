@@ -89,7 +89,7 @@ public class StonecutterRecipeBuilderImpl extends BaseRecipeBuilderImpl<Stonecut
     @Override
     public void build(RecipeBuilder.Context context) {
         final SingleItemRecipeBuilder builder = SingleItemRecipeBuilder.stonecutting(
-                input.createIngredient(context), category, output.getItem(), output.getCount()
+                input.createIngredient(context), category, output.item().value(), output.count()
         );
 
         for (var item : unlocks.entrySet()) {

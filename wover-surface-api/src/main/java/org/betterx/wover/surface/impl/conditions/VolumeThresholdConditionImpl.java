@@ -15,12 +15,11 @@ import net.minecraft.util.valueproviders.FloatProviders;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.ThreadSafeLegacyRandomSource;
 
-import com.google.common.collect.Maps;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class VolumeThresholdConditionImpl extends VolumeNoiseCondition implements VolumeThresholdCondition {
-    private static final Map<Long, Context> NOISES = Maps.newHashMap();
+    private static final ThreadLocal<Map<Long, Context>> NOISES = ThreadLocal.withInitial(HashMap::new);
     public static final MapCodec<VolumeThresholdConditionImpl> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(
                     Codec.LONG.fieldOf("seed").forGetter(p -> p.noiseContext.seed),
@@ -77,7 +76,7 @@ public class VolumeThresholdConditionImpl extends VolumeNoiseCondition implement
         this.scaleY = scaleY;
         this.scaleZ = scaleZ;
 
-        noiseContext = NOISES.computeIfAbsent(noiseSeed, seed -> new Context(seed));
+        noiseContext = NOISES.get().computeIfAbsent(noiseSeed, Context::new);
     }
 
     public double getValue(SurfaceRulesContext context) {

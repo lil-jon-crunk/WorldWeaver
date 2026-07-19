@@ -8,7 +8,6 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceManagerRegistryLoadTask;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,9 +23,6 @@ public abstract class ResourceManagerRegistryLoadTaskMixin<T> {
     @Unique
     private RegistryOps.RegistryInfoLookup wover_registryInfoLookup;
 
-    @Shadow
-    protected abstract Registry<T> readOnlyRegistry();
-
     @Inject(method = "load", at = @At("HEAD"))
     private void wover_captureRegistryInfo(
             RegistryOps.RegistryInfoLookup registryInfoLookup,
@@ -40,13 +36,13 @@ public abstract class ResourceManagerRegistryLoadTaskMixin<T> {
             method = "lambda$load$3",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/resources/RegistryLoadTask;registerElements(Ljava/util/stream/Stream;)V",
+                    target = "Lnet/minecraft/resources/ResourceManagerRegistryLoadTask;registerElements(Ljava/util/stream/Stream;)V",
                     shift = At.Shift.AFTER
             )
     )
     @SuppressWarnings("unchecked")
     private void wover_bootstrap(Map<?, ?> loadedEntries, CallbackInfo ci) {
-        Registry<T> registry = readOnlyRegistry();
+        Registry<T> registry = ((RegistryLoadTaskAccessor<T>) this).wover_readOnlyRegistry();
         DatapackRegistryBuilderImpl.bootstrap(
                 wover_registryInfoLookup,
                 registry.key(),

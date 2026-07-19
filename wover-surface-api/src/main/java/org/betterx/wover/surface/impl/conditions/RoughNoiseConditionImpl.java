@@ -1,8 +1,8 @@
 package org.betterx.wover.surface.impl.conditions;
 
 
+import org.betterx.wover.surface.api.conditions.SurfaceRulesContext;
 import org.betterx.wover.surface.api.noise.NoiseParameterManager;
-import org.betterx.wover.surface.mixin.SurfaceRulesContextAccessor;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -67,7 +67,7 @@ public class RoughNoiseConditionImpl implements SurfaceRules.ConditionSource {
 
     @Override
     public SurfaceRules.Condition apply(final SurfaceRules.Context context2) {
-        final SurfaceRulesContextAccessor ctx = SurfaceRulesContextAccessor.class.cast(context2);
+        final SurfaceRulesContext ctx = SurfaceRulesContext.class.cast(context2);
         final NormalNoise normalNoise = ctx.getRandomState().getOrCreateNoise(this.noise);
         final RandomSource roughnessSource = ctx.getRandomState()
                                                 .getOrCreateRandomFactory(NoiseParameterManager.ROUGHNESS_NOISE.identifier())
@@ -80,7 +80,7 @@ public class RoughNoiseConditionImpl implements SurfaceRules.ConditionSource {
 
             @Override
             protected long getContextLastUpdate() {
-                final SurfaceRulesContextAccessor ctx = SurfaceRulesContextAccessor.class.cast(this.context);
+                final SurfaceRulesContext ctx = SurfaceRulesContext.class.cast(this.context);
                 return ctx.getLastUpdateY() + ctx.getLastUpdateXZ();
             }
 

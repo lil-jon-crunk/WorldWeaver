@@ -13,6 +13,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -33,14 +34,14 @@ public abstract class BaseRecipeBuilderImpl<I extends BaseRecipeBuilder<I>> impl
     protected RecipeCategory category;
     protected String group;
     protected boolean shouldUnlockAdvancements;
-    protected final @NotNull ItemStack output;
+    protected @NotNull ItemStackTemplate output;
     protected final @NotNull ResourceKey<Recipe<?>> key;
 
     protected BaseRecipeBuilderImpl(@NotNull Identifier key, @NotNull ItemLike output) {
-        this(key, new ItemStack(output, 1));
+        this(key, new ItemStackTemplate(output.asItem()));
     }
 
-    protected BaseRecipeBuilderImpl(@NotNull Identifier key, @NotNull ItemStack output) {
+    protected BaseRecipeBuilderImpl(@NotNull Identifier key, @NotNull ItemStackTemplate output) {
         this.key = ResourceKey.create(Registries.RECIPE, key);
         this.category = RecipeCategory.MISC;
         this.output = output;
@@ -58,7 +59,7 @@ public abstract class BaseRecipeBuilderImpl<I extends BaseRecipeBuilder<I>> impl
     }
 
     public I outputCount(int count) {
-        this.output.setCount(count);
+        this.output = this.output.withCount(count);
         return (I) this;
     }
 
@@ -173,7 +174,7 @@ public abstract class BaseRecipeBuilderImpl<I extends BaseRecipeBuilder<I>> impl
     }
 
     protected void validate() {
-        if (output.getCount() <= 0) {
+        if (output.count() <= 0) {
             throwIllegalStateException("Output-Count is zero");
         }
         if (category == null) {

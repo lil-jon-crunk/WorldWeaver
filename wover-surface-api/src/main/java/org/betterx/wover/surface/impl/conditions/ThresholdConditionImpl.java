@@ -14,12 +14,11 @@ import net.minecraft.util.valueproviders.FloatProviders;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.ThreadSafeLegacyRandomSource;
 
-import com.google.common.collect.Maps;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class ThresholdConditionImpl extends SurfaceNoiseCondition {
-    private static final Map<Long, Context> NOISES = Maps.newHashMap();
+    private static final ThreadLocal<Map<Long, Context>> NOISES = ThreadLocal.withInitial(HashMap::new);
     public static final MapCodec<ThresholdConditionImpl> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(
                     Codec.LONG.fieldOf("seed").forGetter(p -> p.noiseContext.seed),
@@ -47,7 +46,7 @@ public class ThresholdConditionImpl extends SurfaceNoiseCondition {
         this.scaleX = scaleX;
         this.scaleZ = scaleZ;
 
-        noiseContext = NOISES.computeIfAbsent(noiseSeed, Context::new);
+        noiseContext = NOISES.get().computeIfAbsent(noiseSeed, Context::new);
     }
 
     @Override
