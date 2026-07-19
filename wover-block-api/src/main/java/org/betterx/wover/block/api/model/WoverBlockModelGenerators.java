@@ -1401,14 +1401,14 @@ public class WoverBlockModelGenerators {
     }
 
     private static final ModelTemplate CHAIN_TEMPLATE = new ModelTemplate(
-            Optional.of(Identifier.withDefaultNamespace("block/chain")),
+            Optional.of(Identifier.withDefaultNamespace("block/template_chain")),
             Optional.empty(),
             TextureSlot.ALL
     );
 
     /**
      * Generates the axis-aligned-pillar blockstate and model (plus an item model) for a chain-style block,
-     * reusing vanilla's own thin X-cross {@code minecraft:block/chain} shape as the model's parent (chains
+     * reusing vanilla's own thin X-cross {@code minecraft:block/template_chain} shape as the model's parent (chains
      * aren't a cube shape, so {@link ModelTemplates#CUBE_COLUMN} doesn't apply here).
      *
      * @param chainBlock The block to generate the blockstate for

@@ -237,7 +237,7 @@ public class ModelTraitLibrary {
     }
 
     /**
-     * A chain-style model (thin axis-aligned X-cross, reusing vanilla's own {@code minecraft:block/chain}
+     * A chain-style model (thin axis-aligned X-cross, reusing vanilla's own {@code minecraft:block/template_chain}
      * shape) using the block's own texture.
      *
      * @return the model trait, or {@code null} outside of datagen
